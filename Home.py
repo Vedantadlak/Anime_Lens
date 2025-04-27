@@ -41,7 +41,7 @@ st.markdown(
     }}
     /* Glassmorphism effect for main container */
     .anime-glass {{
-        background: rgba(255, 255, 255, 0.80);
+        background: #000;
         border-radius: 18px;
         padding: 2rem 2.5rem;
         margin-top: 3rem;
@@ -64,7 +64,7 @@ st.markdown(
     }}
     .anime-subtitle {{
         font-size: 1.25rem;
-        color: #333;
+        color: white;
         text-align: center;
         margin-bottom: 1.3rem;
     }}
@@ -103,6 +103,7 @@ st.markdown(
             <li><b>Genre Popularity Over Time</b>: See which genres are rising or fading.</li>
             <li><b>Seasonal Release Patterns</b>: Explore how seasons affect anime trends.</li>
             <li><b>Studio Specialization</b>: Discover the studios behind your favorite genres.</li>
+            <li><b>Episode Count Analysis</b>: Trends with respect to episode count.</li>
             <li><b>Regional Preferences</b>: Find out what's trending worldwide.</li>
             <li><b>Success Prediction</b>: Try our ML model to predict anime hits!</li>
             <li><b>Genre Networks</b>: Visualize how genres blend in storytelling.</li>
