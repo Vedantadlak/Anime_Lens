@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #1e1e1e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "Comedy", "label": "Comedy", "shape": "dot", "size": 604.2, "title": "Comedy (3021 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Romance", "label": "Romance", "shape": "dot", "size": 235.4, "title": "Romance (1177 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Shounen", "label": "Shounen", "shape": "dot", "size": 236.4, "title": "Shounen (1182 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Supernatural", "label": "Supernatural", "shape": "dot", "size": 172.0, "title": "Supernatural (860 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Parody", "label": "Parody", "shape": "dot", "size": 53.400000000000006, "title": "Parody (267 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "School", "label": "School", "shape": "dot", "size": 200.8, "title": "School (1004 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Magic", "label": "Magic", "shape": "dot", "size": 120.80000000000001, "title": "Magic (604 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Shoujo", "label": "Shoujo", "shape": "dot", "size": 88.0, "title": "Shoujo (440 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Drama", "label": "Drama", "shape": "dot", "size": 267.6, "title": "Drama (1338 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Fantasy", "label": "Fantasy", "shape": "dot", "size": 288.2, "title": "Fantasy (1441 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Music", "label": "Music", "shape": "dot", "size": 65.8, "title": "Music (329 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Slice of Life", "label": "Slice of Life", "shape": "dot", "size": 185.4, "title": "Slice of Life (927 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Harem", "label": "Harem", "shape": "dot", "size": 55.2, "title": "Harem (276 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Action", "label": "Action", "shape": "dot", "size": 410.20000000000005, "title": "Action (2051 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Adventure", "label": "Adventure", "shape": "dot", "size": 271.0, "title": "Adventure (1355 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Super Power", "label": "Super Power", "shape": "dot", "size": 73.4, "title": "Super Power (367 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Ecchi", "label": "Ecchi", "shape": "dot", "size": 101.2, "title": "Ecchi (506 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sci-Fi", "label": "Sci-Fi", "shape": "dot", "size": 263.6, "title": "Sci-Fi (1318 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Seinen", "label": "Seinen", "shape": "dot", "size": 94.0, "title": "Seinen (470 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Martial Arts", "label": "Martial Arts", "shape": "dot", "size": 38.6, "title": "Martial Arts (193 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Demons", "label": "Demons", "shape": "dot", "size": 44.6, "title": "Demons (223 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Historical", "label": "Historical", "shape": "dot", "size": 85.0, "title": "Historical (425 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Sports", "label": "Sports", "shape": "dot", "size": 67.60000000000001, "title": "Sports (338 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Mystery", "label": "Mystery", "shape": "dot", "size": 90.80000000000001, "title": "Mystery (454 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Kids", "label": "Kids", "shape": "dot", "size": 81.2, "title": "Kids (406 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Mecha", "label": "Mecha", "shape": "dot", "size": 108.60000000000001, "title": "Mecha (543 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Police", "label": "Police", "shape": "dot", "size": 31.0, "title": "Police (155 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Horror", "label": "Horror", "shape": "dot", "size": 45.400000000000006, "title": "Horror (227 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Vampire", "label": "Vampire", "shape": "dot", "size": 20.0, "title": "Vampire (100 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Psychological", "label": "Psychological", "shape": "dot", "size": 41.2, "title": "Psychological (206 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Military", "label": "Military", "shape": "dot", "size": 62.400000000000006, "title": "Military (312 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Space", "label": "Space", "shape": "dot", "size": 49.400000000000006, "title": "Space (247 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Game", "label": "Game", "shape": "dot", "size": 33.6, "title": "Game (168 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Samurai", "label": "Samurai", "shape": "dot", "size": 20.400000000000002, "title": "Samurai (102 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Josei", "label": "Josei", "shape": "dot", "size": 13.4, "title": "Josei (67 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Shounen Ai", "label": "Shounen Ai", "shape": "dot", "size": 11.0, "title": "Shounen Ai (55 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Thriller", "label": "Thriller", "shape": "dot", "size": 15.8, "title": "Thriller (79 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Hentai", "label": "Hentai", "shape": "dot", "size": 66.2, "title": "Hentai (331 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Yaoi", "label": "Yaoi", "shape": "dot", "size": 5.6000000000000005, "title": "Yaoi (28 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Shoujo Ai", "label": "Shoujo Ai", "shape": "dot", "size": 11.200000000000001, "title": "Shoujo Ai (56 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Cars", "label": "Cars", "shape": "dot", "size": 8.200000000000001, "title": "Cars (41 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Dementia", "label": "Dementia", "shape": "dot", "size": 9.4, "title": "Dementia (47 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Yuri", "label": "Yuri", "shape": "dot", "size": 2.0, "title": "Yuri (10 shows)"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Unknown", "label": "Unknown", "shape": "dot", "size": 0.8, "title": "Unknown (4 shows)"}]);
+                  edges = new vis.DataSet([{"from": "Comedy", "title": "Co-occurrences: 646", "to": "Romance", "value": 646, "width": 32.300000000000004}, {"from": "Comedy", "title": "Co-occurrences: 717", "to": "Shounen", "value": 717, "width": 35.85}, {"from": "Comedy", "title": "Co-occurrences: 329", "to": "Supernatural", "value": 329, "width": 16.45}, {"from": "Comedy", "title": "Co-occurrences: 234", "to": "Parody", "value": 234, "width": 11.700000000000001}, {"from": "Comedy", "title": "Co-occurrences: 635", "to": "School", "value": 635, "width": 31.75}, {"from": "Comedy", "title": "Co-occurrences: 280", "to": "Magic", "value": 280, "width": 14.0}, {"from": "Comedy", "title": "Co-occurrences: 174", "to": "Shoujo", "value": 174, "width": 8.700000000000001}, {"from": "Comedy", "title": "Co-occurrences: 399", "to": "Drama", "value": 399, "width": 19.950000000000003}, {"from": "Comedy", "title": "Co-occurrences: 596", "to": "Fantasy", "value": 596, "width": 29.8}, {"from": "Comedy", "title": "Co-occurrences: 76", "to": "Music", "value": 76, "width": 3.8000000000000003}, {"from": "Comedy", "title": "Co-occurrences: 571", "to": "Slice of Life", "value": 571, "width": 28.55}, {"from": "Comedy", "title": "Co-occurrences: 192", "to": "Harem", "value": 192, "width": 9.600000000000001}, {"from": "Comedy", "title": "Co-occurrences: 676", "to": "Action", "value": 676, "width": 33.800000000000004}, {"from": "Comedy", "title": "Co-occurrences: 593", "to": "Adventure", "value": 593, "width": 29.650000000000002}, {"from": "Comedy", "title": "Co-occurrences: 178", "to": "Super Power", "value": 178, "width": 8.9}, {"from": "Comedy", "title": "Co-occurrences: 364", "to": "Ecchi", "value": 364, "width": 18.2}, {"from": "Comedy", "title": "Co-occurrences: 449", "to": "Sci-Fi", "value": 449, "width": 22.450000000000003}, {"from": "Comedy", "title": "Co-occurrences: 233", "to": "Seinen", "value": 233, "width": 11.65}, {"from": "Comedy", "title": "Co-occurrences: 70", "to": "Martial Arts", "value": 70, "width": 3.5}, {"from": "Comedy", "title": "Co-occurrences: 82", "to": "Demons", "value": 82, "width": 4.1000000000000005}, {"from": "Comedy", "title": "Co-occurrences: 116", "to": "Historical", "value": 116, "width": 5.800000000000001}, {"from": "Comedy", "title": "Co-occurrences: 157", "to": "Sports", "value": 157, "width": 7.8500000000000005}, {"from": "Comedy", "title": "Co-occurrences: 145", "to": "Mystery", "value": 145, "width": 7.25}, {"from": "Comedy", "title": "Co-occurrences: 216", "to": "Kids", "value": 216, "width": 10.8}, {"from": "Comedy", "title": "Co-occurrences: 128", "to": "Mecha", "value": 128, "width": 6.4}, {"from": "Comedy", "title": "Co-occurrences: 80", "to": "Police", "value": 80, "width": 4.0}, {"from": "Supernatural", "title": "Co-occurrences: 185", "to": "Romance", "value": 185, "width": 9.25}, {"from": "Supernatural", "title": "Co-occurrences: 198", "to": "Shounen", "value": 198, "width": 9.9}, {"from": "Supernatural", "title": "Co-occurrences: 375", "to": "Action", "value": 375, "width": 18.75}, {"from": "Supernatural", "title": "Co-occurrences: 197", "to": "Drama", "value": 197, "width": 9.850000000000001}, {"from": "Supernatural", "title": "Co-occurrences: 255", "to": "Fantasy", "value": 255, "width": 12.75}, {"from": "Supernatural", "title": "Co-occurrences: 109", "to": "School", "value": 109, "width": 5.45}, {"from": "Supernatural", "title": "Co-occurrences: 155", "to": "Adventure", "value": 155, "width": 7.75}, {"from": "Supernatural", "title": "Co-occurrences: 68", "to": "Super Power", "value": 68, "width": 3.4000000000000004}, {"from": "Supernatural", "title": "Co-occurrences: 139", "to": "Demons", "value": 139, "width": 6.95}, {"from": "Supernatural", "title": "Co-occurrences: 89", "to": "Historical", "value": 89, "width": 4.45}, {"from": "Supernatural", "title": "Co-occurrences: 118", "to": "Magic", "value": 118, "width": 5.9}, {"from": "Supernatural", "title": "Co-occurrences: 134", "to": "Horror", "value": 134, "width": 6.7}, {"from": "Supernatural", "title": "Co-occurrences: 167", "to": "Mystery", "value": 167, "width": 8.35}, {"from": "Supernatural", "title": "Co-occurrences: 71", "to": "Vampire", "value": 71, "width": 3.5500000000000003}, {"from": "Supernatural", "title": "Co-occurrences: 75", "to": "Sci-Fi", "value": 75, "width": 3.75}, {"from": "Supernatural", "title": "Co-occurrences: 63", "to": "Psychological", "value": 63, "width": 3.1500000000000004}, {"from": "Supernatural", "title": "Co-occurrences: 81", "to": "Seinen", "value": 81, "width": 4.05}, {"from": "Supernatural", "title": "Co-occurrences: 83", "to": "Ecchi", "value": 83, "width": 4.15}, {"from": "Supernatural", "title": "Co-occurrences: 69", "to": "Slice of Life", "value": 69, "width": 3.45}, {"from": "Romance", "title": "Co-occurrences: 165", "to": "Shounen", "value": 165, "width": 8.25}, {"from": "Romance", "title": "Co-occurrences: 374", "to": "School", "value": 374, "width": 18.7}, {"from": "Romance", "title": "Co-occurrences: 446", "to": "Drama", "value": 446, "width": 22.3}, {"from": "Romance", "title": "Co-occurrences: 237", "to": "Fantasy", "value": 237, "width": 11.850000000000001}, {"from": "Romance", "title": "Co-occurrences: 123", "to": "Magic", "value": 123, "width": 6.15}, {"from": "Romance", "title": "Co-occurrences: 202", "to": "Shoujo", "value": 202, "width": 10.100000000000001}, {"from": "Romance", "title": "Co-occurrences: 215", "to": "Action", "value": 215, "width": 10.75}, {"from": "Romance", "title": "Co-occurrences: 52", "to": "Music", "value": 52, "width": 2.6}, {"from": "Romance", "title": "Co-occurrences: 192", "to": "Slice of Life", "value": 192, "width": 9.600000000000001}, {"from": "Romance", "title": "Co-occurrences: 200", "to": "Harem", "value": 200, "width": 10.0}, {"from": "Romance", "title": "Co-occurrences: 195", "to": "Ecchi", "value": 195, "width": 9.75}, {"from": "Romance", "title": "Co-occurrences: 199", "to": "Sci-Fi", "value": 199, "width": 9.950000000000001}, {"from": "Romance", "title": "Co-occurrences: 73", "to": "Seinen", "value": 73, "width": 3.6500000000000004}, {"from": "Romance", "title": "Co-occurrences: 173", "to": "Adventure", "value": 173, "width": 8.65}, {"from": "Romance", "title": "Co-occurrences: 85", "to": "Historical", "value": 85, "width": 4.25}, {"from": "Romance", "title": "Co-occurrences: 51", "to": "Demons", "value": 51, "width": 2.5500000000000003}, {"from": "Romance", "title": "Co-occurrences: 60", "to": "Military", "value": 60, "width": 3.0}, {"from": "Romance", "title": "Co-occurrences: 51", "to": "Mystery", "value": 51, "width": 2.5500000000000003}, {"from": "Romance", "title": "Co-occurrences: 69", "to": "Mecha", "value": 69, "width": 3.45}, {"from": "Shounen", "title": "Co-occurrences: 190", "to": "School", "value": 190, "width": 9.5}, {"from": "Shounen", "title": "Co-occurrences: 200", "to": "Drama", "value": 200, "width": 10.0}, {"from": "Shounen", "title": "Co-occurrences: 551", "to": "Action", "value": 551, "width": 27.55}, {"from": "Shounen", "title": "Co-occurrences: 440", "to": "Adventure", "value": 440, "width": 22.0}, {"from": "Shounen", "title": "Co-occurrences: 147", "to": "Super Power", "value": 147, "width": 7.3500000000000005}, {"from": "Shounen", "title": "Co-occurrences: 87", "to": "Martial Arts", "value": 87, "width": 4.3500000000000005}, {"from": "Shounen", "title": "Co-occurrences: 57", "to": "Demons", "value": 57, "width": 2.85}, {"from": "Shounen", "title": "Co-occurrences: 305", "to": "Fantasy", "value": 305, "width": 15.25}, {"from": "Shounen", "title": "Co-occurrences: 98", "to": "Ecchi", "value": 98, "width": 4.9}, {"from": "Shounen", "title": "Co-occurrences: 184", "to": "Sports", "value": 184, "width": 9.200000000000001}, {"from": "Shounen", "title": "Co-occurrences: 62", "to": "Historical", "value": 62, "width": 3.1}, {"from": "Shounen", "title": "Co-occurrences: 102", "to": "Magic", "value": 102, "width": 5.1000000000000005}, {"from": "Shounen", "title": "Co-occurrences: 290", "to": "Sci-Fi", "value": 290, "width": 14.5}, {"from": "Shounen", "title": "Co-occurrences: 119", "to": "Mecha", "value": 119, "width": 5.95}, {"from": "Shounen", "title": "Co-occurrences: 55", "to": "Harem", "value": 55, "width": 2.75}, {"from": "Shounen", "title": "Co-occurrences: 87", "to": "Mystery", "value": 87, "width": 4.3500000000000005}, {"from": "Shounen", "title": "Co-occurrences: 68", "to": "Slice of Life", "value": 68, "width": 3.4000000000000004}, {"from": "Shounen", "title": "Co-occurrences: 50", "to": "Police", "value": 50, "width": 2.5}, {"from": "Parody", "title": "Co-occurrences: 50", "to": "School", "value": 50, "width": 2.5}, {"from": "Parody", "title": "Co-occurrences: 53", "to": "Action", "value": 53, "width": 2.6500000000000004}, {"from": "Parody", "title": "Co-occurrences: 51", "to": "Sci-Fi", "value": 51, "width": 2.5500000000000003}, {"from": "School", "title": "Co-occurrences: 75", "to": "Magic", "value": 75, "width": 3.75}, {"from": "School", "title": "Co-occurrences: 113", "to": "Shoujo", "value": 113, "width": 5.65}, {"from": "School", "title": "Co-occurrences: 173", "to": "Action", "value": 173, "width": 8.65}, {"from": "School", "title": "Co-occurrences: 178", "to": "Drama", "value": 178, "width": 8.9}, {"from": "School", "title": "Co-occurrences: 105", "to": "Fantasy", "value": 105, "width": 5.25}, {"from": "School", "title": "Co-occurrences: 123", "to": "Harem", "value": 123, "width": 6.15}, {"from": "School", "title": "Co-occurrences: 283", "to": "Slice of Life", "value": 283, "width": 14.15}, {"from": "School", "title": "Co-occurrences: 52", "to": "Super Power", "value": 52, "width": 2.6}, {"from": "School", "title": "Co-occurrences: 82", "to": "Sports", "value": 82, "width": 4.1000000000000005}, {"from": "School", "title": "Co-occurrences: 167", "to": "Ecchi", "value": 167, "width": 8.35}, {"from": "School", "title": "Co-occurrences: 85", "to": "Seinen", "value": 85, "width": 4.25}, {"from": "School", "title": "Co-occurrences: 91", "to": "Sci-Fi", "value": 91, "width": 4.55}, {"from": "School", "title": "Co-occurrences: 60", "to": "Music", "value": 60, "width": 3.0}, {"from": "Magic", "title": "Co-occurrences: 128", "to": "Shoujo", "value": 128, "width": 6.4}, {"from": "Magic", "title": "Co-occurrences: 107", "to": "Drama", "value": 107, "width": 5.3500000000000005}, {"from": "Magic", "title": "Co-occurrences: 371", "to": "Fantasy", "value": 371, "width": 18.55}, {"from": "Magic", "title": "Co-occurrences: 231", "to": "Action", "value": 231, "width": 11.55}, {"from": "Magic", "title": "Co-occurrences: 181", "to": "Adventure", "value": 181, "width": 9.05}, {"from": "Magic", "title": "Co-occurrences: 52", "to": "Sci-Fi", "value": 52, "width": 2.6}, {"from": "Magic", "title": "Co-occurrences: 61", "to": "Ecchi", "value": 61, "width": 3.0500000000000003}, {"from": "Shoujo", "title": "Co-occurrences: 86", "to": "Slice of Life", "value": 86, "width": 4.3}, {"from": "Shoujo", "title": "Co-occurrences: 137", "to": "Drama", "value": 137, "width": 6.8500000000000005}, {"from": "Shoujo", "title": "Co-occurrences: 60", "to": "Action", "value": 60, "width": 3.0}, {"from": "Shoujo", "title": "Co-occurrences: 159", "to": "Fantasy", "value": 159, "width": 7.95}, {"from": "Shoujo", "title": "Co-occurrences: 52", "to": "Music", "value": 52, "width": 2.6}, {"from": "Drama", "title": "Co-occurrences: 270", "to": "Fantasy", "value": 270, "width": 13.5}, {"from": "Drama", "title": "Co-occurrences: 413", "to": "Action", "value": 413, "width": 20.650000000000002}, {"from": "Drama", "title": "Co-occurrences: 331", "to": "Sci-Fi", "value": 331, "width": 16.55}, {"from": "Drama", "title": "Co-occurrences: 109", "to": "Seinen", "value": 109, "width": 5.45}, {"from": "Drama", "title": "Co-occurrences: 229", "to": "Slice of Life", "value": 229, "width": 11.450000000000001}, {"from": "Drama", "title": "Co-occurrences: 92", "to": "Sports", "value": 92, "width": 4.6000000000000005}, {"from": "Drama", "title": "Co-occurrences: 281", "to": "Adventure", "value": 281, "width": 14.05}, {"from": "Drama", "title": "Co-occurrences: 163", "to": "Historical", "value": 163, "width": 8.15}, {"from": "Drama", "title": "Co-occurrences: 60", "to": "Music", "value": 60, "width": 3.0}, {"from": "Drama", "title": "Co-occurrences: 117", "to": "Mystery", "value": 117, "width": 5.8500000000000005}, {"from": "Drama", "title": "Co-occurrences: 103", "to": "Psychological", "value": 103, "width": 5.15}, {"from": "Drama", "title": "Co-occurrences: 90", "to": "Space", "value": 90, "width": 4.5}, {"from": "Drama", "title": "Co-occurrences: 143", "to": "Mecha", "value": 143, "width": 7.15}, {"from": "Drama", "title": "Co-occurrences: 136", "to": "Military", "value": 136, "width": 6.800000000000001}, {"from": "Drama", "title": "Co-occurrences: 68", "to": "Horror", "value": 68, "width": 3.4000000000000004}, {"from": "Fantasy", "title": "Co-occurrences: 616", "to": "Action", "value": 616, "width": 30.8}, {"from": "Fantasy", "title": "Co-occurrences: 55", "to": "Martial Arts", "value": 55, "width": 2.75}, {"from": "Fantasy", "title": "Co-occurrences: 99", "to": "Slice of Life", "value": 99, "width": 4.95}, {"from": "Fantasy", "title": "Co-occurrences: 104", "to": "Demons", "value": 104, "width": 5.2}, {"from": "Fantasy", "title": "Co-occurrences: 108", "to": "Historical", "value": 108, "width": 5.4}, {"from": "Fantasy", "title": "Co-occurrences: 636", "to": "Adventure", "value": 636, "width": 31.8}, {"from": "Fantasy", "title": "Co-occurrences: 88", "to": "Super Power", "value": 88, "width": 4.4}, {"from": "Fantasy", "title": "Co-occurrences: 58", "to": "Game", "value": 58, "width": 2.9000000000000004}, {"from": "Fantasy", "title": "Co-occurrences: 114", "to": "Ecchi", "value": 114, "width": 5.7}, {"from": "Fantasy", "title": "Co-occurrences: 168", "to": "Kids", "value": 168, "width": 8.4}, {"from": "Fantasy", "title": "Co-occurrences: 152", "to": "Sci-Fi", "value": 152, "width": 7.6000000000000005}, {"from": "Fantasy", "title": "Co-occurrences: 61", "to": "Mystery", "value": 61, "width": 3.0500000000000003}, {"from": "Fantasy", "title": "Co-occurrences: 60", "to": "Harem", "value": 60, "width": 3.0}, {"from": "Kids", "title": "Co-occurrences: 160", "to": "Adventure", "value": 160, "width": 8.0}, {"from": "Kids", "title": "Co-occurrences: 71", "to": "Action", "value": 71, "width": 3.5500000000000003}, {"from": "Action", "title": "Co-occurrences: 638", "to": "Adventure", "value": 638, "width": 31.900000000000002}, {"from": "Action", "title": "Co-occurrences: 291", "to": "Super Power", "value": 291, "width": 14.55}, {"from": "Action", "title": "Co-occurrences: 157", "to": "Martial Arts", "value": 157, "width": 7.8500000000000005}, {"from": "Action", "title": "Co-occurrences: 113", "to": "Demons", "value": 113, "width": 5.65}, {"from": "Action", "title": "Co-occurrences: 153", "to": "Historical", "value": 153, "width": 7.65}, {"from": "Action", "title": "Co-occurrences: 164", "to": "Ecchi", "value": 164, "width": 8.200000000000001}, {"from": "Action", "title": "Co-occurrences: 85", "to": "Sports", "value": 85, "width": 4.25}, {"from": "Action", "title": "Co-occurrences: 61", "to": "Game", "value": 61, "width": 3.0500000000000003}, {"from": "Action", "title": "Co-occurrences: 709", "to": "Sci-Fi", "value": 709, "width": 35.45}, {"from": "Action", "title": "Co-occurrences: 104", "to": "Horror", "value": 104, "width": 5.2}, {"from": "Action", "title": "Co-occurrences: 150", "to": "Mystery", "value": 150, "width": 7.5}, {"from": "Action", "title": "Co-occurrences: 55", "to": "Psychological", "value": 55, "width": 2.75}, {"from": "Action", "title": "Co-occurrences: 353", "to": "Mecha", "value": 353, "width": 17.650000000000002}, {"from": "Action", "title": "Co-occurrences: 212", "to": "Military", "value": 212, "width": 10.600000000000001}, {"from": "Action", "title": "Co-occurrences: 149", "to": "Space", "value": 149, "width": 7.45}, {"from": "Action", "title": "Co-occurrences: 78", "to": "Samurai", "value": 78, "width": 3.9000000000000004}, {"from": "Action", "title": "Co-occurrences: 176", "to": "Seinen", "value": 176, "width": 8.8}, {"from": "Action", "title": "Co-occurrences: 80", "to": "Police", "value": 80, "width": 4.0}, {"from": "Action", "title": "Co-occurrences: 64", "to": "Harem", "value": 64, "width": 3.2}, {"from": "Music", "title": "Co-occurrences: 64", "to": "Slice of Life", "value": 64, "width": 3.2}, {"from": "Slice of Life", "title": "Co-occurrences: 115", "to": "Seinen", "value": 115, "width": 5.75}, {"from": "Slice of Life", "title": "Co-occurrences: 52", "to": "Sci-Fi", "value": 52, "width": 2.6}, {"from": "Harem", "title": "Co-occurrences: 142", "to": "Ecchi", "value": 142, "width": 7.1000000000000005}, {"from": "Harem", "title": "Co-occurrences: 50", "to": "Sci-Fi", "value": 50, "width": 2.5}, {"from": "Adventure", "title": "Co-occurrences: 98", "to": "Super Power", "value": 98, "width": 4.9}, {"from": "Adventure", "title": "Co-occurrences: 64", "to": "Martial Arts", "value": 64, "width": 3.2}, {"from": "Adventure", "title": "Co-occurrences: 124", "to": "Historical", "value": 124, "width": 6.2}, {"from": "Adventure", "title": "Co-occurrences: 64", "to": "Demons", "value": 64, "width": 3.2}, {"from": "Adventure", "title": "Co-occurrences: 159", "to": "Mecha", "value": 159, "width": 7.95}, {"from": "Adventure", "title": "Co-occurrences: 62", "to": "Military", "value": 62, "width": 3.1}, {"from": "Adventure", "title": "Co-occurrences: 395", "to": "Sci-Fi", "value": 395, "width": 19.75}, {"from": "Adventure", "title": "Co-occurrences: 51", "to": "Ecchi", "value": 51, "width": 2.5500000000000003}, {"from": "Adventure", "title": "Co-occurrences: 98", "to": "Mystery", "value": 98, "width": 4.9}, {"from": "Adventure", "title": "Co-occurrences: 60", "to": "Seinen", "value": 60, "width": 3.0}, {"from": "Adventure", "title": "Co-occurrences: 71", "to": "Space", "value": 71, "width": 3.5500000000000003}, {"from": "Adventure", "title": "Co-occurrences: 54", "to": "Police", "value": 54, "width": 2.7}, {"from": "Super Power", "title": "Co-occurrences: 67", "to": "Martial Arts", "value": 67, "width": 3.35}, {"from": "Super Power", "title": "Co-occurrences: 98", "to": "Sci-Fi", "value": 98, "width": 4.9}, {"from": "Sci-Fi", "title": "Co-occurrences: 93", "to": "Ecchi", "value": 93, "width": 4.65}, {"from": "Sci-Fi", "title": "Co-occurrences: 75", "to": "Seinen", "value": 75, "width": 3.75}, {"from": "Sci-Fi", "title": "Co-occurrences: 432", "to": "Mecha", "value": 432, "width": 21.6}, {"from": "Sci-Fi", "title": "Co-occurrences: 196", "to": "Military", "value": 196, "width": 9.8}, {"from": "Sci-Fi", "title": "Co-occurrences: 229", "to": "Space", "value": 229, "width": 11.450000000000001}, {"from": "Sci-Fi", "title": "Co-occurrences: 78", "to": "Mystery", "value": 78, "width": 3.9000000000000004}, {"from": "Sci-Fi", "title": "Co-occurrences: 63", "to": "Police", "value": 63, "width": 3.1500000000000004}, {"from": "Sci-Fi", "title": "Co-occurrences: 77", "to": "Psychological", "value": 77, "width": 3.85}, {"from": "Ecchi", "title": "Co-occurrences: 64", "to": "Seinen", "value": 64, "width": 3.2}, {"from": "Seinen", "title": "Co-occurrences: 53", "to": "Mystery", "value": 53, "width": 2.6500000000000004}, {"from": "Historical", "title": "Co-occurrences: 76", "to": "Samurai", "value": 76, "width": 3.8000000000000003}, {"from": "Horror", "title": "Co-occurrences: 74", "to": "Mystery", "value": 74, "width": 3.7}, {"from": "Horror", "title": "Co-occurrences: 51", "to": "Psychological", "value": 51, "width": 2.5500000000000003}, {"from": "Mystery", "title": "Co-occurrences: 80", "to": "Psychological", "value": 80, "width": 4.0}, {"from": "Mystery", "title": "Co-occurrences: 62", "to": "Police", "value": 62, "width": 3.1}, {"from": "Mecha", "title": "Co-occurrences: 140", "to": "Military", "value": 140, "width": 7.0}, {"from": "Mecha", "title": "Co-occurrences: 122", "to": "Space", "value": 122, "width": 6.1000000000000005}, {"from": "Military", "title": "Co-occurrences: 103", "to": "Space", "value": 103, "width": 5.15}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 120,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
